@@ -6,6 +6,7 @@ The `vault-config.json` file requires -
 2. Multiple roles associated to the Vault
 3. Multiple policies associated to each role
 4. One service account for each role
+5. The schema for the vault to be created has to be available in a file and path should be provided in the config file. The easiest way to do this is to create a Vault manually in Studio and then use the 'download schema' to save that to a file
 
 Considerations to make -
 1. The config file should have one of "pat" or "creds-file". pat is the Personal Access Token that can be generated from the Studio (only in Try). The creds file should be of a service account that has access to create vaults
