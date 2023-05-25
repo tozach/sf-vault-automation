@@ -1,19 +1,19 @@
 {
     "vault": {
-        "pat": "",
-        "creds-file": "/Users/user/Downloads/try-vault-creator.json",
-        "name": "DemoVault",
-        "schema-location": "/Users/toms/Downloads/vault-schema.json",
-        "description": "Vault for automation demo",
-        "display-name": "vault-create-test",
+        "pat": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2MiOiJlNWVmMmUyZmZkNDQ0NDNiODFjZGY3OWY5ZGM3ZThkZCIsImF1ZCI6Imh0dHBzOi8vbWFuYWdlLnNreWZsb3dhcGlzLmNvbSIsImV4cCI6MTY4NzYxODEyMiwiaWF0IjoxNjg1MDI2MTIyLCJpc3MiOiJzYS1hdXRoQG1hbmFnZS5za3lmbG93YXBpcy5jb20iLCJqdGkiOiJhZmU2ZGFkZmZmMGQ0YmU1YTBiZmRlYzc0ZTNkNTZmNCIsInN1YiI6Im9mNDg1OTE1M2ZkZDRjNjc5MzYxZTAxNTAzOTAyMzQ0In0.QyG3ZMf6-5RMq1gxUePm5SaVtpWnbbgE5GsvGjDI5DEvnK-C6ejjxBPWz665MT9JC0xXJ9042WLXnJcpaMjarjIdG2ZWlnlPXkmXQp3yMdF-WmpTxXoDPZ87Pzp-_BmS8THteHDjMfvORPwIcVMpQl8AjXgk0h02xMDVIBIhrVh__BRafdUFxYXY9zpExppqmMRkIFR_qnNPlPVmiflhivz6qKdoHPb-hwoOt0T0zbElsFq4GcT0AMQj-H2beaK2aJr1JYpXmOEbu1jKajtLtvyq6yNrnv77LPVFVDgwrWkEHzT0VcLwEmGYUFlyYQI0Op3O16IA-Du1BRoH0oK7uw",
+        "creds-file": "",
+        "name": "phi",
+        "schema-location": "/Users/toms/Downloads/phi_schema.json",
+        "description": "Vault for PHI demo",
+        "display-name": "PHI Vault",
         "manage-url": "https://manage.skyflowapis.com/v1/",
-        "workspace-id": "Your workspace-id here",
-        "account-id": "Your account-id here",
+        "workspace-id": "dd5ffcf29280491eb6e8526af5958bfb",
+        "account-id": "e5ef2e2ffd44443b81cdf79f9dc7e8dd",
         "awsSecretName": "dev/demo-vault/creds-xxxxxx",
         "roles": [
             {
-                "name": "ROLE_1",
-                "description": "Role 1",
+                "name": "Doctor",
+                "description": "Doctor",
                 "permissions": [
                     "accounts.read",
                     "workspaces.read",
@@ -21,47 +21,33 @@
                 ],                
                 "policies": [
                     {
-                        "name": "ROLE_1",
-                        "description": "Role 1 plain text policy",
+                        "name": "Doctor",
+                        "description": "Doctor plain text policy",
                         "ruleParams": [
                             {
-                                "name": "ROLE_1_T_PLAIN_TEXT",
-                                "ruleExpression": "ALLOW READ ON table.skyflow_id, table.column1, table.column2 WITH REDACTION = PLAIN_TEXT",
+                                "name": "DOCTOR_PLAIN_TEXT",
+                                "ruleExpression": "ALLOW READ ON phi.* WITH REDACTION = PLAIN_TEXT",
                                 "columnRuleParams": {
                                     "columns": [
-                                        "table.column1",
-                                        "table.column2"
+                                        "phi.*"
                                     ],
                                     "action": "READ",
                                     "effect": "ALLOW",
                                     "redaction": "PLAIN_TEXT"
                                 }
-                            },
-                            {
-                                "name": "ROLE_2",
-                                "ruleExpression": "ALLOW READ ON table.column3, table.column4 WITH REDACTION = REDACTED",
-                                "columnRuleParams": {
-                                    "columns": [
-                                        "table.column3",
-                                        "table.column4"
-                                    ],
-                                    "action": "READ",
-                                    "effect": "ALLOW",
-                                    "redaction": "REDACTED"
-                                }
-                            }
+                            }                
                         ]
                     }
                 ],
                 "service-account": {
-                    "name": "ROLE1",
-                    "display-name": "ROLE1",
-                    "description": "ROLE1"
+                    "name": "doctor-sa",
+                    "display-name": "Doctor",
+                    "description": "Doctor"
                 }
             },
             {
-                "name": "ROLE_2",
-                "description": "ROLE_2",
+                "name": "Nurse",
+                "description": "Nurse Masked",
                 "permissions": [
                     "accounts.read",
                     "workspaces.read",
@@ -69,61 +55,31 @@
                 ],
                 "policies": [
                     {
-                        "name": "ROLE_2",
-                        "description": "ROLE_2 policy",
+                        "name": "Nurse",
+                        "description": "Nurse Masked",
                         "ruleParams": [
                             {
-                                "name": "ALL",
-                                "ruleExpression": "ALLOW ALL ON table.* WITH REDACTION = PLAIN_TEXT WHERE end_of_life_items.owner_id = $ctx",
+                                "name": "NURSE_MASKED",
+                                "ruleExpression": "ALLOW READ ON phi.* WITH REDACTION = DEFAULT",
                                 "columnRuleParams": {
                                     "columns": [
-                                        "table.column1",
-                                        "table.column2",
-                                        "table.column3",
-                                        "table.column4"                                        
+                                        "phi.*"
                                     ],
-                                    "action": "ALL",
+                                    "action": "READ",
                                     "effect": "ALLOW",
-                                    "redaction": "PLAIN_TEXT"
-                                }
-                            },
-                            {
-                                "name": "TOKENIZATION",
-                                "ruleExpression": "ALLOW TOKENIZATION",                             
-                                "columnRuleParams": {
-                                    "action": "TOKENIZATION",
-                                    "effect": "ALLOW",
-                                    "columns": [
-                                        "table.column1",
-                                        "table.column2",
-                                        "table.column3",
-                                        "table.column4"                                        
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "DETOKENIZATION",
-                                "ruleExpression": "ALLOW DETOKENIZATION",                               
-                                "columnRuleParams": {
-                                    "action": "DETOKENIZATION",
-                                    "effect": "ALLOW",
-                                    "columns": [
-                                        "table.column2",
-                                        "table.column3",
-                                        "table.column4"                                        
-                                    ]
+                                    "redaction": "DEFAULT"
                                 }
                             }
                         ]
                     }
                 ],
                 "service-account": {
-                    "name": "ROLE_2",
-                    "display-name": "ROLE_2",
-                    "description": "ROLE_2"
+                    "name": "Nurse",
+                    "display-name": "Nurse",
+                    "description": "Nurse"
                 }
             }
         ],
-        "user-id": "Your user id here"
+        "user-id": ""
     }
 }

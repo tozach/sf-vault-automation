@@ -1,0 +1,127 @@
+{
+    "vault": {
+        "pat": "",
+        "creds-file": "",
+        "name": "phi",
+        "schema-location": "/Users/toms/Downloads/phi_schema.json",
+        "description": "Vault for PHI demo",
+        "display-name": "PHI Vault",
+        "manage-url": "https://manage.skyflowapis.com/v1/",
+        "workspace-id": "dd5ffcf29280491eb6e8526af5958bfb",
+        "account-id": "e5ef2e2ffd44443b81cdf79f9dc7e8dd",
+        "awsSecretName": "dev/demo-vault/creds-xxxxxx",
+        "roles": [
+            {
+                "name": "Doctor",
+                "description": "Doctor",
+                "permissions": [
+                    "accounts.read",
+                    "workspaces.read",
+                    "vaults.read"
+                ],                
+                "policies": [
+                    {
+                        "name": "Doctor",
+                        "description": "Doctor plain text policy",
+                        "ruleParams": [
+                            {
+                                "name": "DOCTOR_PLAIN_TEXT",
+                                "ruleExpression": "ALLOW READ ON phi.* WITH REDACTION = PLAIN_TEXT",
+                                "columnRuleParams": {
+                                    "columns": [
+                                        "phi.*"
+                                    ],
+                                    "action": "READ",
+                                    "effect": "ALLOW",
+                                    "redaction": "PLAIN_TEXT"
+                                }
+                            },
+                            {
+                                "name": "NURSE_MASKED",
+                                "ruleExpression": "ALLOW READ ON phi.* WITH REDACTION = MASKED",
+                                "columnRuleParams": {
+                                    "columns": [
+                                        "phi.*"
+                                    ],
+                                    "action": "READ",
+                                    "effect": "ALLOW",
+                                    "redaction": "MASKED"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "service-account": {
+                    "name": "doctor-sa",
+                    "display-name": "Doctor",
+                    "description": "Doctor"
+                }
+            },
+            {
+                "name": "ROLE_2",
+                "description": "ROLE_2",
+                "permissions": [
+                    "accounts.read",
+                    "workspaces.read",
+                    "vaults.read"
+                ],
+                "policies": [
+                    {
+                        "name": "ROLE_2",
+                        "description": "ROLE_2 policy",
+                        "ruleParams": [
+                            {
+                                "name": "ALL",
+                                "ruleExpression": "ALLOW ALL ON table.* WITH REDACTION = PLAIN_TEXT WHERE end_of_life_items.owner_id = $ctx",
+                                "columnRuleParams": {
+                                    "columns": [
+                                        "table.column1",
+                                        "table.column2",
+                                        "table.column3",
+                                        "table.column4"                                        
+                                    ],
+                                    "action": "ALL",
+                                    "effect": "ALLOW",
+                                    "redaction": "PLAIN_TEXT"
+                                }
+                            },
+                            {
+                                "name": "TOKENIZATION",
+                                "ruleExpression": "ALLOW TOKENIZATION",                             
+                                "columnRuleParams": {
+                                    "action": "TOKENIZATION",
+                                    "effect": "ALLOW",
+                                    "columns": [
+                                        "table.column1",
+                                        "table.column2",
+                                        "table.column3",
+                                        "table.column4"                                        
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "DETOKENIZATION",
+                                "ruleExpression": "ALLOW DETOKENIZATION",                               
+                                "columnRuleParams": {
+                                    "action": "DETOKENIZATION",
+                                    "effect": "ALLOW",
+                                    "columns": [
+                                        "table.column2",
+                                        "table.column3",
+                                        "table.column4"                                        
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "service-account": {
+                    "name": "ROLE_2",
+                    "display-name": "ROLE_2",
+                    "description": "ROLE_2"
+                }
+            }
+        ],
+        "user-id": "Your user id here"
+    }
+}
