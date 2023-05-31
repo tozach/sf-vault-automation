@@ -1,0 +1,85 @@
+{
+    "vault": {
+        "pat": "",
+        "creds-file": "",
+        "name": "phi",
+        "schema-location": "/Users/toms/Downloads/phi_schema.json",
+        "description": "Vault for PHI demo",
+        "display-name": "PHI Vault",
+        "manage-url": "https://manage.skyflowapis.com/v1/",
+        "workspace-id": "",
+        "account-id": "",
+        "awsSecretName": "dev/demo-vault/creds-xxxxxx",
+        "roles": [
+            {
+                "name": "Doctor",
+                "description": "Doctor",
+                "permissions": [
+                    "accounts.read",
+                    "workspaces.read",
+                    "vaults.read"
+                ],                
+                "policies": [
+                    {
+                        "name": "Doctor",
+                        "description": "Doctor plain text policy",
+                        "ruleParams": [
+                            {
+                                "name": "DOCTOR_PLAIN_TEXT",
+                                "ruleExpression": "ALLOW READ ON phi.* WITH REDACTION = PLAIN_TEXT",
+                                "columnRuleParams": {
+                                    "columns": [
+                                        "phi.*"
+                                    ],
+                                    "action": "READ",
+                                    "effect": "ALLOW",
+                                    "redaction": "PLAIN_TEXT"
+                                }
+                            }                
+                        ]
+                    }
+                ],
+                "service-account": {
+                    "name": "doctor-sa",
+                    "display-name": "Doctor",
+                    "description": "Doctor"
+                }
+            },
+            {
+                "name": "Nurse",
+                "description": "Nurse Masked",
+                "permissions": [
+                    "accounts.read",
+                    "workspaces.read",
+                    "vaults.read"
+                ],
+                "policies": [
+                    {
+                        "name": "Nurse",
+                        "description": "Nurse Masked",
+                        "ruleParams": [
+                            {
+                                "name": "NURSE_MASKED",
+                                "ruleExpression": "ALLOW READ ON phi.* WITH REDACTION = DEFAULT",
+                                "columnRuleParams": {
+                                    "columns": [
+                                        "phi.*"
+                                    ],
+                                    "action": "READ",
+                                    "effect": "ALLOW",
+                                    "redaction": "DEFAULT"
+                                }
+                            }
+                        ]
+                    }
+                ],
+                "service-account": {
+                    "name": "Nurse",
+                    "display-name": "Nurse",
+                    "description": "Nurse"
+                }
+            }
+        ],
+        "user-id": ""
+    }
+}
